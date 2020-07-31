@@ -13,11 +13,15 @@ public class LabP2_JosueFernandez {
 
     private static ArrayList<Empleado> emp;
 
+        public static int contadorGerentes=0;
+        public static int contadorCajeros=0;
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         int opcion = 0;
+        
         boolean loggedIn = false;
 
         emp = new ArrayList();
@@ -40,7 +44,18 @@ public class LabP2_JosueFernandez {
 
             if (loggedIn) {
 
+                if (contadorGerentes == 0){
+                    if (contadorCajeros!=0) {
+                        System.out.println("¡Alerta! Debe ascender un cajero a gerente.");
+                        opcion = 1;
+                    } else {
+                        System.out.println("¡Alerta! Debe contratar a otro gerente.");
+                        opcion = 4;
+                    }
+                }
+                
                 switch (opcion) {
+                    //////////////////////////////////////////////////
                     case 1:
                         //Registrar empleados
 
@@ -73,26 +88,47 @@ public class LabP2_JosueFernandez {
                         System.out.print("\nIngrese el título del nuevo empleado: ");
                         String titulo = sc.next();
 
-                        System.out.print("\nIngrese el color favorito del empleado (en inglés): ");
+                        System.out.print("\nIngrese el color favorito del nuevo empleado: ");
                         String colorFavorito = sc.next();
 
                         int tipo;
+                        boolean nomas = false;
                         do {
-                            System.out.println("1. Gerente\n2. Aseador\n3. Cajero\n1. Seguridad\n");
+                            System.out.println("\n1. Gerente\n2. Aseador\n3. Cajero\n1. Seguridad");
                             System.out.print("Ingrese el cargo del empleado: ");
                             tipo = sc.nextInt();
-                        } while(tipo<1 || tipo>4);
+                            
+                            if (contadorGerentes==3) {
+                                System.out.println("No se puede contratar otro gerente.");
+                                nomas = true;
+                            }
+                            
+                        } while(tipo<1 || tipo>4 || nomas);
                         
                         String genero = sexo==1 ? "Masculino" : "Femenino";
                         
-                        Empleado empleado = new Empleado(colorFavorito, edad, genero, altura, peso, titulo, tipo);
+                        Empleado empleado = new Empleado(colorFavorito, edad, genero, altura, peso, titulo, tipo, nombre, apellido);
                         
                         emp.add(empleado);
 
                         break;
+                        
+                    //////////////////////////////////////////////////
                     case 2:
                         //Despedir empleados
+                        listarTodos();
+                        System.out.print("Ingrese el número del empleado que se desea despedir: ");
+                        int pos = sc.nextInt();
+                        
+                        if (pos<1 || pos>emp.size()) {
+                            System.out.println("\nNo ha ingresado un empleado válido.");
+                        } else {
+                            emp.remove(pos-1);
+                            System.out.println("\n¡Empleado despedido con éxito!");
+                        }
+                        
                         break;
+                        
                     //////////////////////////////////////////////////
                     case 3:
                         System.out.println("Usted ya inició sesión.");
@@ -127,15 +163,18 @@ public class LabP2_JosueFernandez {
                 String usuario = sc.next();
 
                 System.out.print("\nIngrese su contraseña: ");
+                sc.nextLine();
                 String contra = sc.nextLine();
 
                 if (usuario.equals("leobanegas") && contra.equals("99")) {
-                    System.out.println("Sesión iniciada exitosamente.");
+                    System.out.println("\nSesión iniciada exitosamente.");
                     loggedIn = true;
                 } else {
-                    System.out.println("Usuario o contraseña incorrectos. No se ha iniciado la sesión.");
+                    System.out.println("\nUsuario o contraseña incorrectos. No se ha iniciado la sesión.");
                 }
 
+            } else {
+                System.out.println("Aún no has iniciado sesión.");
             }
 
             //Fin del ciclo principal
@@ -156,9 +195,10 @@ public class LabP2_JosueFernandez {
     public static int listarCategoria(String tipo, int inicio) {
 
         System.out.println("Cargo - " + tipo + ":");
+        System.out.printf("%19s%15s%17s%n","Nombre","Apellido","Salario");
         for (Empleado empleado : emp) {
             if (empleado.getCargo().equals(tipo)) {
-                System.out.println(inicio + ". " + empleado.toString());
+                System.out.printf("%2d. %15s%15sLps. %.2f%n",inicio,(empleado.getNombre()),(empleado.getApellido()),(empleado.getSalario()));
                 inicio++;
             }
         }

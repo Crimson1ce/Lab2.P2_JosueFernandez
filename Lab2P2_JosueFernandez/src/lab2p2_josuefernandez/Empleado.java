@@ -21,22 +21,26 @@ public class Empleado {
     private String cargo;
     private float salario;
 
-    public Empleado(String colorFavorito, int edad, String genero, float altura, float peso, String titulo, int tipo) {
+    public Empleado(String colorFavorito, int edad, String genero, float altura, float peso, String titulo, int tipo, String nombre, String apellido) {
         this.colorFavorito = colorFavorito;
         this.edad = edad;
         this.genero = genero;
         this.altura = altura;
         this.peso = peso;
         this.titulo = titulo;
+        this.nombre = nombre;
+        this.apellido = apellido;
         
         switch(tipo){
             case 1:
                 this.cargo = "Gerente";
                 this.salario = 50000f;
+                LabP2_JosueFernandez.contadorGerentes++;
                 break;
             case 2:
                 this.cargo = "Aseador";
                 this.salario = 30000f;
+                LabP2_JosueFernandez.contadorCajeros++;
                 break;
             case 3:
                 this.cargo = "Cajero";
