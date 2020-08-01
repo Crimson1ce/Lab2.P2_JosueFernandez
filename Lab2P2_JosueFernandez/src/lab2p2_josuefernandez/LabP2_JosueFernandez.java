@@ -13,15 +13,17 @@ public class LabP2_JosueFernandez {
 
     private static ArrayList<Empleado> emp;
 
-        public static int contadorGerentes=0;
-        public static int contadorCajeros=0;
-    
+    public static int contadorGerentes = 0;
+    public static int contadorCajeros = 0;
+    public static int contadorAseadores = 0;
+    public static int contadorSeguridad = 0;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         int opcion = 0;
-        
+
         boolean loggedIn = false;
 
         emp = new ArrayList();
@@ -42,18 +44,21 @@ public class LabP2_JosueFernandez {
             opcion = sc.nextInt();
             System.out.println();
 
+            boolean ascenderRandom = false;
+
             if (loggedIn) {
 
-                if (contadorGerentes == 0){
-                    if (contadorCajeros!=0) {
-                        System.out.println("¡Alerta! Debe ascender un cajero a gerente.");
+                if (contadorGerentes == 0) {
+                    if (contadorCajeros != 0) {
+                        System.out.println("¡Alerta! Se ascenderá a un cajero a gerente aleatoriamente.");
                         opcion = 1;
+                        ascenderRandom = true;
                     } else {
                         System.out.println("¡Alerta! Debe contratar a otro gerente.");
                         opcion = 4;
                     }
                 }
-                
+
                 switch (opcion) {
                     //////////////////////////////////////////////////
                     case 1:
@@ -97,38 +102,41 @@ public class LabP2_JosueFernandez {
                             System.out.println("\n1. Gerente\n2. Aseador\n3. Cajero\n1. Seguridad");
                             System.out.print("Ingrese el cargo del empleado: ");
                             tipo = sc.nextInt();
-                            
-                            if (contadorGerentes==3) {
+
+                            if (contadorGerentes == 3) {
                                 System.out.println("No se puede contratar otro gerente.");
                                 nomas = true;
                             }
-                            
-                        } while(tipo<1 || tipo>4 || nomas);
-                        
-                        String genero = sexo==1 ? "Masculino" : "Femenino";
-                        
+
+                        } while (tipo < 1 || tipo > 4 || nomas);
+
+                        String genero = sexo == 1 ? "Masculino" : "Femenino";
+
                         Empleado empleado = new Empleado(colorFavorito, edad, genero, altura, peso, titulo, tipo, nombre, apellido);
-                        
+
                         emp.add(empleado);
 
                         break;
-                        
+
                     //////////////////////////////////////////////////
                     case 2:
                         //Despedir empleados
                         listarTodos();
                         System.out.print("Ingrese el número del empleado que se desea despedir: ");
                         int pos = sc.nextInt();
-                        
-                        if (pos<1 || pos>emp.size()) {
+
+                        if (pos < 1 || pos > emp.size()) {
                             System.out.println("\nNo ha ingresado un empleado válido.");
                         } else {
-                            emp.remove(pos-1);
+
+                            int posreal = recorrerLista(pos);
+
+                            emp.remove(posreal);
                             System.out.println("\n¡Empleado despedido con éxito!");
                         }
-                        
+
                         break;
-                        
+
                     //////////////////////////////////////////////////
                     case 3:
                         System.out.println("Usted ya inició sesión.");
@@ -136,6 +144,25 @@ public class LabP2_JosueFernandez {
 
                     case 4:
                         //Ascender Cajero
+
+                        if (contadorGerentes<3) {
+                            int i = listarCategoria("Cajero", 1);
+                            System.out.print("Ingrese el número del cajero que desee ascender a gerente: ");
+                            int posicion = sc.nextInt();
+
+                            if (posicion < 1 || posicion > contadorCajeros) {
+                                System.out.println("\nNo ha ingresado un empleado válido.");
+                            } else {
+
+                                int posreal = recorrerLista(posicion, "Cajero");
+
+                                emp.get(posreal).setCargo("Gerente");
+
+                                System.out.println("\n¡Empleado ascendido con éxito!");
+                            }
+                        } else {
+                            System.out.println("No se puede ascender a un cajero en este momento. Ya hay gerentes suficientes.");
+                        }
 
                         break;
 
@@ -147,6 +174,7 @@ public class LabP2_JosueFernandez {
 
                     case 6:
                         //Modificar empleado
+                        
                         break;
                     case 7:
                         //RANDOM
@@ -184,8 +212,8 @@ public class LabP2_JosueFernandez {
 
     public static void listarTodos() {
 
-        int i = 1;
-        i = listarCategoria("Gerente", i);
+        int i;
+        i = listarCategoria("Gerente", 1);
         i = listarCategoria("Aseador", i);
         i = listarCategoria("Cajero", i);
         i = listarCategoria("Seguridad", i);
@@ -195,16 +223,80 @@ public class LabP2_JosueFernandez {
     public static int listarCategoria(String tipo, int inicio) {
 
         System.out.println("Cargo - " + tipo + ":");
-        System.out.printf("%19s%15s%17s%n","Nombre","Apellido","Salario");
+        System.out.printf("%19s%15s%17s%n", "Nombre", "Apellido", "Salario");
         for (Empleado empleado : emp) {
             if (empleado.getCargo().equals(tipo)) {
-                System.out.printf("%2d. %15s%15sLps. %.2f%n",inicio,(empleado.getNombre()),(empleado.getApellido()),(empleado.getSalario()));
+                System.out.printf("%2d. %15s%15sLps. %.2f%n", inicio, (empleado.getNombre()), (empleado.getApellido()), (empleado.getSalario()));
                 inicio++;
             }
         }
         System.out.println();
 
         return inicio;
+    }
+
+    public static int recorrerLista(int i) {
+
+        int j = 0;
+        for (Empleado e : emp) {
+            if (e.getCargo().equals("Gerente")) {
+                j++;
+            }
+
+            if (j == i) {
+                return emp.indexOf(e);
+            }
+
+        }
+        for (Empleado e : emp) {
+            if (e.getCargo().equals("Aseador")) {
+                j++;
+            }
+
+            if (j == i) {
+                return emp.indexOf(e);
+            }
+
+        }
+        for (Empleado e : emp) {
+            if (e.getCargo().equals("Cajero")) {
+                j++;
+            }
+
+            if (j == i) {
+                return emp.indexOf(e);
+            }
+
+        }
+        for (Empleado e : emp) {
+            if (e.getCargo().equals("Seguridad")) {
+                j++;
+            }
+
+            if (j == i) {
+                return emp.indexOf(e);
+            }
+
+        }
+
+        return j;
+    }
+
+    public static int recorrerLista(int i, String tipo) {
+
+        int j = 0;
+        for (Empleado e : emp) {
+            if (e.getCargo().equals(tipo)) {
+                j++;
+            }
+
+            if (j == i) {
+                return emp.indexOf(e);
+            }
+
+        }
+
+        return j;
     }
 
 }

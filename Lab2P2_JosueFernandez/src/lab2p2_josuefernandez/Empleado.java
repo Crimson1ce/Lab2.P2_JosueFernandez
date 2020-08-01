@@ -10,9 +10,9 @@ package lab2p2_josuefernandez;
 public class Empleado {
     
     //Atributos
-    private static String nombre;
-    private static String apellido;
-    private static String colorFavorito;
+    private String nombre;
+    private String apellido;
+    private String colorFavorito;
     private int edad;
     private String genero;
     private float altura;
@@ -40,15 +40,17 @@ public class Empleado {
             case 2:
                 this.cargo = "Aseador";
                 this.salario = 30000f;
-                LabP2_JosueFernandez.contadorCajeros++;
+                LabP2_JosueFernandez.contadorAseadores++;
                 break;
             case 3:
                 this.cargo = "Cajero";
                 this.salario = 40000f;
+                LabP2_JosueFernandez.contadorCajeros++;
                 break;
             case 4:
                 this.cargo = "Seguridad";
                 this.salario = 38000f;
+                LabP2_JosueFernandez.contadorSeguridad++;
                 break;
             default:
                 System.out.println("BUG");
@@ -56,20 +58,22 @@ public class Empleado {
         
     }
 
-    public static String getNombre() {
+    //Getters y setters
+    
+    public String getNombre() {
         return nombre;
     }
 
-    public static void setNombre(String nombre) {
-        Empleado.nombre = nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public static String getApellido() {
+    public String getApellido() {
         return apellido;
     }
 
-    public static void setApellido(String apellido) {
-        Empleado.apellido = apellido;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getColorFavorito() {
