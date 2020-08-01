@@ -48,7 +48,7 @@ public class LabP2_JosueFernandez {
 
             if (loggedIn) {
 
-                if (contadorGerentes == 0) {
+                if (contadorGerentes == 0 && opcion != 0) {
                     if (contadorCajeros != 0) {
                         System.out.println("¡Alerta! Se ascenderá a un cajero a gerente aleatoriamente.");
                         opcion = 1;
@@ -68,8 +68,12 @@ public class LabP2_JosueFernandez {
                         String nombre = sc.next();
                         System.out.print("\nIngrese el apellido del nuevo empleado: ");
                         String apellido = sc.next();
-                        System.out.print("\nIngrese la edad del nuevo empleado: ");
-                        int edad = sc.nextInt();
+
+                        int edad;
+                        do {
+                            System.out.print("\nIngrese la edad del nuevo empleado: ");
+                            edad = sc.nextInt();
+                        } while (edad < 0);
 
                         int sexo;
                         do {
@@ -145,7 +149,7 @@ public class LabP2_JosueFernandez {
                     case 4:
                         //Ascender Cajero
 
-                        if (contadorGerentes<3) {
+                        if (contadorGerentes < 3) {
                             int i = listarCategoria("Cajero", 1);
                             System.out.print("Ingrese el número del cajero que desee ascender a gerente: ");
                             int posicion = sc.nextInt();
@@ -174,7 +178,112 @@ public class LabP2_JosueFernandez {
 
                     case 6:
                         //Modificar empleado
-                        
+
+                        listarTodos();
+
+                        System.out.print("Qué empleado desea modificar?: ");
+                        int numeroEmpleado = sc.nextInt();
+
+                        if (numeroEmpleado < 1 || numeroEmpleado > emp.size()) {
+                            System.out.println("No ha escogido un empleado válido.");
+                        } else {
+
+                            int posreal = recorrerLista(numeroEmpleado);
+
+                            System.out.println();
+                            System.out.println("1. Nombre");
+                            System.out.println("2. Apellido");
+                            System.out.println("3. Edad");
+                            System.out.println("4. Género");
+                            System.out.println("5. Altura");
+                            System.out.println("6. Peso");
+                            System.out.println("7. Título");
+                            System.out.println("8. Color Favorito");
+                            System.out.println("9. Cargo\n");
+                            System.out.print("¿Qué característica desea modificar?: ");
+                            int carac = sc.nextInt();
+
+                            switch (carac) {
+                                case 1:
+
+                                    System.out.print("Ingrese el nombre del empleado: ");
+                                    emp.get(posreal).setNombre(sc.next());
+                                    break;
+                                case 2:
+                                    System.out.print("\nIngrese el apellido del empleado: ");
+                                    emp.get(posreal).setApellido(sc.next());
+                                    break;
+                                case 3:
+                                    int ed;
+                                    do {
+                                        System.out.print("\nIngrese la edad del empleado: ");
+                                        ed = sc.nextInt();
+                                    } while (ed < 0);
+                                    emp.get(posreal).setEdad(ed);
+                                    break;
+                                case 4:
+                                    int sex;
+                                    do {
+                                        System.out.println("\n1. Masculino\n2. Femenino");
+                                        System.out.print("Ingrese el género del empleado: ");
+                                        sex = sc.nextInt();
+                                    } while (sex != 1 && sex != 2);
+
+                                    String gen = sex == 1 ? "Masculino" : "Femenino";
+
+                                    emp.get(posreal).setGenero(gen);
+
+                                    break;
+                                case 5:
+
+                                    float alt;
+                                    do {
+                                        System.out.print("\nIngrese la altura del empleado (en m): ");
+                                        alt = sc.nextFloat();
+                                    } while (alt <= 0);
+                                    emp.get(posreal).setAltura(alt);
+                                    break;
+
+                                case 6:
+                                    float pes;
+                                    do {
+                                        System.out.print("\nIngrese el peso del empleado (en lb): ");
+                                        pes = sc.nextFloat();
+                                    } while (pes <= 0);
+                                    emp.get(posreal).setPeso(pes);
+                                    break;
+                                case 7:
+                                    System.out.print("\nIngrese el título del empleado: ");
+                                    emp.get(posreal).setTitulo(sc.next());
+                                    break;
+                                case 8:
+                                    System.out.print("\nIngrese el color favorito del empleado: ");
+                                    emp.get(posreal).setColorFavorito(sc.next());
+                                    break;
+                                case 9:
+                                    int tip;
+                                    boolean yanomas = false;
+                                    do {
+                                        System.out.println("\n1. Gerente\n2. Aseador\n3. Cajero\n1. Seguridad");
+                                        System.out.print("Ingrese el cargo del empleado: ");
+                                        tipo = sc.nextInt();
+
+                                        if (contadorGerentes == 3) {
+                                            System.out.println("No se puede contratar otro gerente.");
+                                            yanomas = true;
+                                        }
+
+                                    } while (tipo < 1 || tipo > 4 || yanomas);
+
+                                    //emp.get(posreal).set(sc.next());
+                                    
+
+                                    break;
+                                default:
+                            }
+
+                        }
+
                         break;
                     case 7:
                         //RANDOM
